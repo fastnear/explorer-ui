@@ -41,7 +41,7 @@ function renderBlocks(blocks) {
             {new Date(firstBlock["block_timestamp"] / 1e6).toLocaleString()}
           </div>
           <div>#{height}</div>
-          <div>{blocks.length} transactions</div>
+          <div>{blocks.length} transactions and receipts</div>
         </div>
       );
     });
