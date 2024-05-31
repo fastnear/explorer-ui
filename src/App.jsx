@@ -7,12 +7,14 @@ function App() {
 
   return (
     <>
-      <div>
-        <a href="https://fastnear.com" target="_blank">
-          <img src={Logo} className="logo" alt="FASTNEAR logo" />
-        </a>
-      </div>
-      <h1>FA{"A".repeat(count)}STNEAR</h1>
+      <a
+        href="https://fastnear.com"
+        target="_blank"
+        className="flex items-center justify-center"
+      >
+        <img src={Logo} className="logo" alt="FASTNEAR logo" />
+      </a>
+      <h1 className="text-7xl font-bold">FA{"A".repeat(count)}STNEAR</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>FASTER!</button>
       </div>
