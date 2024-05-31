@@ -1,12 +1,17 @@
 import { useState } from "react";
 import Logo from "/app.png";
-import "./App.scss";
+import "./IndexPage.scss";
+import LastBlocks from "../../components/blocks/LastBlocks.jsx";
 
-function App() {
+export default function IndexPage(props) {
   const [count, setCount] = useState(0);
 
   return (
     <>
+      <div className="mb-3">
+        <LastBlocks />
+      </div>
+
       <div>
         <a href="https://fastnear.com" target="_blank">
           <img src={Logo} className="logo" alt="FASTNEAR logo" />
@@ -24,5 +29,3 @@ function App() {
     </>
   );
 }
-
-export default App;
