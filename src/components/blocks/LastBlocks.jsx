@@ -20,31 +20,20 @@ async function fetchLastTxs() {
 }
 
 function renderBlocks(blocks) {
-  const blockTxs = blocks["block_txs"];
-  const blocksByHeight = {};
-  // Group blocks by height
-  blockTxs.forEach((block) => {
-    const height = block["block_height"];
-    if (!blocksByHeight[height]) {
-      blocksByHeight[height] = [];
-    }
-    blocksByHeight[height].push(block);
+  return blocks.blocks.map((b) => {
+    const height = b["block_height"];
+    const count = b["txs_count"];
+    const blockHash = b["block_hash"];
+    const timestamp = b["block_timestamp"] / 1e6;
+    return (
+      <div key={height} className="d-flex gap-4 font-monospace">
+        <div>{blockHash.padStart(44)}</div>
+        <div>{new Date(timestamp).toLocaleString()}</div>
+        <div>#{height}</div>
+        <div>{count} transactions and receipts</div>
+      </div>
+    );
   });
-  return Object.keys(blocksByHeight)
-    .sort((a, b) => b - a)
-    .map((height) => {
-      const blocks = blocksByHeight[height];
-      const firstBlock = blocks[0];
-      return (
-        <div key={height} className="d-flex gap-4 font-monospace">
-          <div>
-            {new Date(firstBlock["block_timestamp"] / 1e6).toLocaleString()}
-          </div>
-          <div>#{height}</div>
-          <div>{blocks.length} transactions and receipts</div>
-        </div>
-      );
-    });
 }
 
 export default function LastBlocks() {
