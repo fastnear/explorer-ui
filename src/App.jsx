@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Logo from "/app.png";
-import "./App.css";
+import "./App.scss";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,8 +13,13 @@ function App() {
         </a>
       </div>
       <h1>FA{"A".repeat(count)}STNEAR</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>FASTER!</button>
+      <div>
+        <button
+          className="btn btn-primary"
+          onClick={() => setCount((count) => count + 1)}
+        >
+          FASTER!
+        </button>
       </div>
     </>
   );
