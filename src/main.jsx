@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import IndexPage from "./pages/index/IndexPage.jsx";
 import ErrorPage from "./pages/error/ErrorPage.jsx";
 import RootWrapper from "./components/navigation/RootWrapper.jsx";
+import BlockPage from "./pages/block/BlockPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <IndexPage />,
+      },
+      {
+        path: "/block/:blockId",
+        element: <BlockPage />,
       },
     ],
   },

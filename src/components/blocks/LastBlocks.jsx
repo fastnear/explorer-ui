@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 async function fetchLastTxs() {
   try {
@@ -20,20 +21,38 @@ async function fetchLastTxs() {
 }
 
 function renderBlocks(blocks) {
-  return blocks.blocks.map((b) => {
-    const height = b["block_height"];
-    const count = b["txs_count"];
-    const blockHash = b["block_hash"];
-    const timestamp = b["block_timestamp"] / 1e6;
-    return (
-      <div key={height} className="d-flex gap-4 font-monospace">
-        <div>{blockHash.padStart(44)}</div>
-        <div>{new Date(timestamp).toLocaleString()}</div>
-        <div>#{height}</div>
-        <div>{count} transactions and receipts</div>
-      </div>
-    );
-  });
+  return (
+    <table className="table table-striped">
+      <thead>
+        <tr>
+          <th>Block Hash</th>
+          <th>Timestamp</th>
+          <th>Height</th>
+          <th>TX/R Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {blocks.blocks.map((b) => {
+          const height = b["block_height"];
+          const count = b["txs_count"];
+          const blockHash = b["block_hash"];
+          const timestamp = b["block_timestamp"] / 1e6;
+          return (
+            <tr>
+              <td>
+                <Link to={`/block/${blockHash}`}>{blockHash}</Link>
+              </td>
+              <td>{new Date(timestamp).toLocaleString()}</td>
+              <td>
+                <Link to={`/block/${height}`}>#{height}</Link>
+              </td>
+              <td>{count}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
 }
 
 export default function LastBlocks() {
