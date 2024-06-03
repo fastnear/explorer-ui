@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import "./BlockPage.scss";
 import { useParams } from "react-router-dom";
-import { Transaction } from "../../components/transaction/Transaction.jsx";
+import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 
 // Returns number if the blockId is a valid block height, otherwise returns original string
 function parseBlockId(blockId) {
@@ -44,9 +44,11 @@ function renderBlockTransactions(blockData) {
     <>
       <p>Total transactions: {blockData["block_txs"].length}</p>
       <div>
-        {blockData["transactions"].map((transaction, i) => (
-          <Transaction key={i} transaction={transaction} />
-        ))}
+        <TransactionsTable
+          contextAccountId={null}
+          transactions={blockData["transactions"]}
+          txHashes={blockData["block_txs"].map((r) => r["transaction_hash"])}
+        />
       </div>
     </>
   );

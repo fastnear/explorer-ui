@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { CryptoHash } from "../common/CryptoHash.jsx";
 
 async function fetchLastTxs() {
   try {
@@ -40,7 +41,9 @@ function renderBlocks(blocks) {
           return (
             <tr>
               <td>
-                <Link to={`/block/${blockHash}`}>{blockHash}</Link>
+                <Link to={`/block/${blockHash}`}>
+                  <CryptoHash hash={blockHash} />
+                </Link>
               </td>
               <td>{new Date(timestamp).toLocaleString()}</td>
               <td>
