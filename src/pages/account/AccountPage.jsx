@@ -25,9 +25,10 @@ async function fetchAccountTransactions(accountId) {
 }
 
 function renderAccountTransactions(accountId, accountData) {
+  console.log(accountData);
   return (
     <>
-      <p>Total transactions: {accountData["account_txs"].length}</p>
+      <p>Total transactions: {accountData["txs_count"]}</p>
       <div>
         <TransactionsTable
           contextAccountId={accountId}
