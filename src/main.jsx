@@ -7,6 +7,7 @@ import IndexPage from "./pages/index/IndexPage.jsx";
 import ErrorPage from "./pages/error/ErrorPage.jsx";
 import RootWrapper from "./components/navigation/RootWrapper.jsx";
 import BlockPage from "./pages/block/BlockPage.jsx";
+import AccountPage from "./pages/account/AccountPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/block/:blockId",
         element: <BlockPage />,
+      },
+      {
+        path: "/account/:accountId",
+        element: <AccountPage />,
       },
     ],
   },
