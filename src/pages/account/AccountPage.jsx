@@ -4,6 +4,7 @@ import "./AccountPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 import { AccountId } from "../../components/common/AccountId.jsx";
+import { processTransaction } from "../../api/transaction/transactions.js";
 import { fetchJson } from "../../utils/fetch-json.js";
 
 const fetchAccountTransactions = (accountId) =>
@@ -21,7 +22,7 @@ function renderAccountTransactions(accountId, accountData) {
       <div>
         <TransactionsTable
           contextAccountId={accountId}
-          transactions={accountData["transactions"]}
+          transactions={accountData["transactions"].map(processTransaction)}
           txHashes={accountData["account_txs"].map(
             (r) => r["transaction_hash"],
           )}
@@ -38,7 +39,9 @@ export default function AccountPage(props) {
   useEffect(() => {
     setAccountData(null);
     if (accountId) {
-      fetchAccountTransactions(accountId).then(setAccountData).catch(console.error);
+      fetchAccountTransactions(accountId)
+        .then(setAccountData)
+        .catch(console.error);
     } else {
       setAccountData(false);
     }

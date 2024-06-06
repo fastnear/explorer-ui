@@ -5,14 +5,10 @@ import React, {
   useState,
 } from "react";
 import { TransactionRow } from "./TransactionRow.jsx";
-import { fetchJson } from "../../../utils/fetch-json.js";
-
-const fetchTransactions = (txHashes) =>
-  fetchJson({
-    method: "POST",
-    url: "https://explorer.main.fastnear.com/v0/transactions",
-    body: { tx_hashes: txHashes },
-  });
+import {
+  fetchTransactions,
+  processTransaction,
+} from "../../../api/transaction/transactions.js";
 
 // Takes a list of tx_hashes and a list of preloaded transactions.
 export function TransactionsTable(props) {
@@ -41,17 +37,20 @@ export function TransactionsTable(props) {
           loading: true,
         },
       }));
-      fetchTransactions(nextTxHashes).then((nextTransactions) => {
-        console.log("READY page", page);
-        setPageData((pageData) => ({
-          ...pageData,
-          [page]: nextTransactions
-            ? {
-                transactions: nextTransactions.transactions,
-              }
-            : { transactions: [], error: true },
-        }));
-      }).catch(console.error);
+      fetchTransactions(nextTxHashes)
+        .then((nextTransactions) => {
+          console.log("READY page", page);
+          setPageData((pageData) => ({
+            ...pageData,
+            [page]: nextTransactions
+              ? {
+                  transactions:
+                    nextTransactions.transactions.map(processTransaction),
+                }
+              : { transactions: [], error: true },
+          }));
+        })
+        .catch(console.error);
     },
     [pageSize, txHashes],
   );
@@ -97,11 +96,12 @@ export function TransactionsTable(props) {
       <table className="table table-sm table-striped">
         <thead>
           <tr>
-            <th>Block hash</th>
             <th>Status</th>
-            <th>Hash</th>
+            <th>TX Hash</th>
+            <th>Actions</th>
             <th>Signer</th>
             <th>Receiver</th>
+            <th>Block hash</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +109,7 @@ export function TransactionsTable(props) {
             <TransactionRow
               contextAccountId={contextAccountId}
               transaction={transaction}
-              key={transaction.transaction.hash}
+              key={transaction.hash}
             />
           ))}
         </tbody>

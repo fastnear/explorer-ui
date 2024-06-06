@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "./BlockPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
+import { processTransaction } from "../../api/transaction/transactions.js";
 import { fetchJson } from "../../utils/fetch-json.js";
 
 // Returns number if the blockId is a valid block height, otherwise returns original string
@@ -35,7 +36,7 @@ function renderBlockTransactions(blockData) {
       <div>
         <TransactionsTable
           contextAccountId={null}
-          transactions={blockData["transactions"]}
+          transactions={blockData["transactions"].map(processTransaction)}
           txHashes={blockData["block_txs"].map((r) => r["transaction_hash"])}
         />
       </div>
