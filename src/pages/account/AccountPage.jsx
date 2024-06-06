@@ -4,25 +4,14 @@ import "./AccountPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 import { AccountId } from "../../components/common/AccountId.jsx";
+import { fetchJson } from "../../utils/fetch-json.js";
 
-async function fetchAccountTransactions(accountId) {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/account",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ account_id: accountId }),
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+const fetchAccountTransactions = (accountId) =>
+  fetchJson({
+    method: "POST",
+    url: "https://explorer.main.fastnear.com/v0/account",
+    body: { account_id: accountId },
+  });
 
 function renderAccountTransactions(accountId, accountData) {
   console.log(accountData);
@@ -49,7 +38,7 @@ export default function AccountPage(props) {
   useEffect(() => {
     setAccountData(null);
     if (accountId) {
-      fetchAccountTransactions(accountId).then(setAccountData);
+      fetchAccountTransactions(accountId).then(setAccountData).catch(console.error);
     } else {
       setAccountData(false);
     }

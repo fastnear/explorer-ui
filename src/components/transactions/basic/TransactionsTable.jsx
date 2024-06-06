@@ -5,25 +5,14 @@ import React, {
   useState,
 } from "react";
 import { TransactionRow } from "./TransactionRow.jsx";
+import { fetchJson } from "../../../utils/fetch-json.js";
 
-async function fetchTransactions(txHashes) {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/transactions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tx_hashes: txHashes }),
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+const fetchTransactions = (txHashes) =>
+  fetchJson({
+    method: "POST",
+    url: "https://explorer.main.fastnear.com/v0/transactions",
+    body: { tx_hashes: txHashes },
+  });
 
 // Takes a list of tx_hashes and a list of preloaded transactions.
 export function TransactionsTable(props) {
@@ -62,7 +51,7 @@ export function TransactionsTable(props) {
               }
             : { transactions: [], error: true },
         }));
-      });
+      }).catch(console.error);
     },
     [pageSize, txHashes],
   );
