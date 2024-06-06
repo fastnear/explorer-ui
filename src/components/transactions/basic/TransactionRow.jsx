@@ -1,53 +1,41 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CryptoHash } from "../../common/CryptoHash.jsx";
 import { AccountId } from "../../common/AccountId.jsx";
 import { Link } from "react-router-dom";
-
-function txStatus(transaction) {
-  let executionOutcome = transaction["execution_outcome"];
-  const receipts = transaction["receipts"].reduce((acc, r) => {
-    acc[r["receipt"]["receipt_id"]] = r;
-    return acc;
-  }, {});
-  while (true) {
-    const status = executionOutcome.outcome.status;
-    if ("SuccessReceiptId" in status) {
-      const receiptId = status["SuccessReceiptId"];
-      executionOutcome = receipts[receiptId]["execution_outcome"];
-    } else {
-      return status;
-    }
-  }
-}
+import { transactionStatus } from "../../../api/transaction/transactions.js";
+import { TransactionDetail } from "../actions/TransactionDetail.jsx";
 
 export function TransactionRow(props) {
-  const { transaction: transactionFull, contextAccountId } = props;
-  // console.log(transactionFull, contextAccountId);
-  const transaction = transactionFull["transaction"];
-  const status = txStatus(transactionFull);
+  const { transaction, contextAccountId } = props;
+  const status = useMemo(() => transactionStatus(transaction), [transaction]);
   return (
     <tr>
+      <td>{"SuccessValue" in status ? "OK" : "F"}</td>
       <td>
-        <Link
-          to={`/block/${transactionFull["execution_outcome"]["block_hash"]}`}
-        >
-          <CryptoHash
-            hash={transactionFull["execution_outcome"]["block_hash"]}
-          />
-        </Link>
-      </td>
-      <td>{"SuccessValue" in status ? "SUCCESS" : "FAILURE"}</td>
-      <td>
-        <CryptoHash hash={transaction.hash} />
-      </td>
-      <td>
-        <Link to={`/account/${transaction["signer_id"]}`}>
-          <AccountId accountId={transaction["signer_id"]} />
+        <Link to={`/tx/${transaction.hash}`}>
+          <CryptoHash hash={transaction.hash} />
         </Link>
       </td>
       <td>
-        <Link to={`/account/${transaction["receiver_id"]}`}>
-          <AccountId accountId={transaction["receiver_id"]} />
+        <TransactionDetail
+          transaction={transaction}
+          contextAccountId={contextAccountId}
+        />
+      </td>
+      <td>
+        {transaction.signerId !== transaction.realSignerId ? "[D] " : ""}
+        <Link to={`/account/${transaction.realSignerId}`}>
+          <AccountId accountId={transaction.realSignerId} />
+        </Link>
+      </td>
+      <td>
+        <Link to={`/account/${transaction.receiverId}`}>
+          <AccountId accountId={transaction.receiverId} />
+        </Link>
+      </td>
+      <td>
+        <Link to={`/block/${transaction.executionOutcome.blockHash}`}>
+          <CryptoHash hash={transaction.executionOutcome.blockHash} />
         </Link>
       </td>
     </tr>

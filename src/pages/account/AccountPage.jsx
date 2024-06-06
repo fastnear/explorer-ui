@@ -4,6 +4,7 @@ import "./AccountPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 import { AccountId } from "../../components/common/AccountId.jsx";
+import { processTransaction } from "../../api/transaction/transactions.js";
 
 async function fetchAccountTransactions(accountId) {
   try {
@@ -32,7 +33,7 @@ function renderAccountTransactions(accountId, accountData) {
       <div>
         <TransactionsTable
           contextAccountId={accountId}
-          transactions={accountData["transactions"]}
+          transactions={accountData["transactions"].map(processTransaction)}
           txHashes={accountData["account_txs"].map(
             (r) => r["transaction_hash"],
           )}

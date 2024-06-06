@@ -5,25 +5,10 @@ import React, {
   useState,
 } from "react";
 import { TransactionRow } from "./TransactionRow.jsx";
-
-async function fetchTransactions(txHashes) {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/transactions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tx_hashes: txHashes }),
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+import {
+  fetchTransactions,
+  processTransaction,
+} from "../../../api/transaction/transactions.js";
 
 // Takes a list of tx_hashes and a list of preloaded transactions.
 export function TransactionsTable(props) {
@@ -58,7 +43,8 @@ export function TransactionsTable(props) {
           ...pageData,
           [page]: nextTransactions
             ? {
-                transactions: nextTransactions.transactions,
+                transactions:
+                  nextTransactions.transactions.map(processTransaction),
               }
             : { transactions: [], error: true },
         }));
@@ -108,11 +94,12 @@ export function TransactionsTable(props) {
       <table className="table table-sm table-striped">
         <thead>
           <tr>
-            <th>Block hash</th>
             <th>Status</th>
-            <th>Hash</th>
+            <th>TX Hash</th>
+            <th>Actions</th>
             <th>Signer</th>
             <th>Receiver</th>
+            <th>Block hash</th>
           </tr>
         </thead>
         <tbody>
@@ -120,7 +107,7 @@ export function TransactionsTable(props) {
             <TransactionRow
               contextAccountId={contextAccountId}
               transaction={transaction}
-              key={transaction.transaction.hash}
+              key={transaction.hash}
             />
           ))}
         </tbody>

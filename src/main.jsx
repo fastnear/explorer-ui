@@ -8,6 +8,7 @@ import ErrorPage from "./pages/error/ErrorPage.jsx";
 import RootWrapper from "./components/navigation/RootWrapper.jsx";
 import BlockPage from "./pages/block/BlockPage.jsx";
 import AccountPage from "./pages/account/AccountPage.jsx";
+import TransactionPage from "./pages/transaction/TransactionPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/account/:accountId",
         element: <AccountPage />,
+      },
+      {
+        path: "/tx/:txHash",
+        element: <TransactionPage />,
       },
     ],
   },
