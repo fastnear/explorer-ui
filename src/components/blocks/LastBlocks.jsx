@@ -1,25 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CryptoHash } from "../common/CryptoHash.jsx";
+import { fetchJson } from "../../utils/fetch-json.js";
 
-async function fetchLastTxs() {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/blocks/last",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: "{}",
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+const fetchLastBlocks = () => fetchJson({ method: "POST", url: "https://explorer.main.fastnear.com/v0/blocks/last" });
 
 function renderBlocks(blocks) {
   return (
@@ -62,7 +46,7 @@ export default function LastBlocks() {
   const [blocks, setBlocks] = useState(null);
 
   useEffect(() => {
-    fetchLastTxs().then(setBlocks);
+    fetchLastBlocks().then(setBlocks).catch(console.error);
   }, []);
 
   return blocks ? (

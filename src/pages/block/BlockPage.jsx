@@ -4,6 +4,7 @@ import "./BlockPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 import { processTransaction } from "../../api/transaction/transactions.js";
+import { fetchJson } from "../../utils/fetch-json.js";
 
 // Returns number if the blockId is a valid block height, otherwise returns original string
 function parseBlockId(blockId) {
@@ -21,24 +22,12 @@ function parseBlockId(blockId) {
   return parsed;
 }
 
-async function fetchBlockTransactions(blockId) {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/block",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ block_id: parseBlockId(blockId) }),
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+const fetchBlockTransactions = (blockId) =>
+  fetchJson({
+    method: "POST",
+    url: "https://explorer.main.fastnear.com/v0/block",
+    body: { block_id: parseBlockId(blockId) },
+  });
 
 function renderBlockTransactions(blockData) {
   return (
@@ -61,7 +50,7 @@ export default function BlockPage(props) {
 
   useEffect(() => {
     if (blockId) {
-      fetchBlockTransactions(blockId).then(setBlockData);
+      fetchBlockTransactions(blockId).then(setBlockData).catch(console.error);
     } else {
       setBlockData(false);
     }

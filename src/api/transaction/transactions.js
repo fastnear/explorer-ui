@@ -1,4 +1,5 @@
 import { keysToCamel } from "../utils/utils.js";
+import { fetchJson } from "../../utils/fetch-json.js";
 
 const LogEventPrefix = "EVENT_JSON:";
 
@@ -54,21 +55,9 @@ export function transactionStatus(transaction) {
   }
 }
 
-export async function fetchTransactions(txHashes) {
-  try {
-    const response = await fetch(
-      "https://explorer.main.fastnear.com/v0/transactions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tx_hashes: txHashes }),
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
+export const fetchTransactions = async (txHashes) =>
+  fetchJson({
+    method: "POST",
+    url: "https://explorer.main.fastnear.com/v0/transactions",
+    body: { tx_hashes: txHashes },
+  });

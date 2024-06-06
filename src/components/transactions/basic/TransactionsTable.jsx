@@ -37,18 +37,20 @@ export function TransactionsTable(props) {
           loading: true,
         },
       }));
-      fetchTransactions(nextTxHashes).then((nextTransactions) => {
-        console.log("READY page", page);
-        setPageData((pageData) => ({
-          ...pageData,
-          [page]: nextTransactions
-            ? {
-                transactions:
-                  nextTransactions.transactions.map(processTransaction),
-              }
-            : { transactions: [], error: true },
-        }));
-      });
+      fetchTransactions(nextTxHashes)
+        .then((nextTransactions) => {
+          console.log("READY page", page);
+          setPageData((pageData) => ({
+            ...pageData,
+            [page]: nextTransactions
+              ? {
+                  transactions:
+                    nextTransactions.transactions.map(processTransaction),
+                }
+              : { transactions: [], error: true },
+          }));
+        })
+        .catch(console.error);
     },
     [pageSize, txHashes],
   );
