@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { CryptoHash } from "../common/CryptoHash.jsx";
 import { fetchJson } from "../../utils/fetch-json.js";
 
-const fetchLastBlocks = () => fetchJson({ method: "POST", url: "https://explorer.main.fastnear.com/v0/blocks/last" });
+const fetchLastBlocks = () =>
+  fetchJson({
+    method: "POST",
+    url: "https://explorer.main.fastnear.com/v0/blocks/last",
+  });
 
 function renderBlocks(blocks) {
   return (
@@ -23,7 +27,7 @@ function renderBlocks(blocks) {
           const blockHash = b["block_hash"];
           const timestamp = b["block_timestamp"] / 1e6;
           return (
-            <tr>
+            <tr key={height}>
               <td>
                 <Link to={`/block/${blockHash}`}>
                   <CryptoHash hash={blockHash} />

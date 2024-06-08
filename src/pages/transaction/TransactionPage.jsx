@@ -4,6 +4,7 @@ import "./TransactionPage.scss";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/transactions/basic/TransactionsTable.jsx";
 import {
+  extractTransfers,
   fetchTransactions,
   processTransaction,
 } from "../../api/transaction/transactions.js";
@@ -11,6 +12,9 @@ import {
 function renderTransaction(transaction) {
   return (
     <>
+      <div>
+        <pre>{JSON.stringify(extractTransfers(transaction), null, 2)}</pre>
+      </div>
       <div>
         <pre>{JSON.stringify(transaction, null, 2)}</pre>
       </div>
